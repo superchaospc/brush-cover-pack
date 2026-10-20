@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brush Cover Pack"
+  short_description: "Black-and-yellow brush headline video covers in 7 ratios, safe for Douyin and Xiaohongshu"
+  default_prompt: "Use $brush-cover-pack to make the cover set for this channel breakdown: headline from the report's verified growth number, the creator's real filming gear, all 7 ratios, upload JPGs and compliant social titles."

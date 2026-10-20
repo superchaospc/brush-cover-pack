@@ -1,0 +1,17 @@
+{
+  "work_dir": "~/brush-cover-demo",
+  "out_dir": "~/brush-cover-demo/成都夜市摊主-半年涨粉10万-封面套装",
+  "texts": {
+    "label": "超叫兽 · 频道拆解",
+    "line1": "成都夜市摊主",
+    "line2": "收摊后拍摆摊日常",
+    "headline": "半年涨粉10万！"
+  },
+  "breaks": "white \"收摊后\" / \"拍摆摊日常\" only if needed; yellow \"半年\" / \"涨粉10万！\" (prefer one line)",
+  "identity_refs": [],
+  "style_refs": [],
+  "subject": "a fictional Chinese woman in her early thirties, shoulder-length black hair tied back, no glasses, warm friendly smile, wearing a dark green apron over a cream T-shirt",
+  "scene": "her small skewer stall at a busy Chengdu night market, warm string lights and golden bokeh behind her, light steam rising from the grill",
+  "filming": "her only camera is a smartphone on a small clamp tripod fixed to the edge of the stall, lens facing her, tiny red recording light on; she is not holding it",
+  "ratios": ["9:16"]
+}
