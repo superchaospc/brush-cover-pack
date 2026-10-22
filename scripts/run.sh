@@ -25,7 +25,7 @@ missing_ratios() { for r in $RATIOS; do [[ -f $OUT/$r-高清.png ]] || echo $r; 
 mkdir -p $OUT; cd $W
 for i in 1 2 3 4; do
   [[ -f $OUT/YouTube-16比9-高清.png ]] && break
-  grep -q 'usage limit' codex-run.log 2>/dev/null && wait_reset codex-run.log
+  grep -q 'hit your usage limit' codex-run.log 2>/dev/null && wait_reset codex-run.log
   echo "$(date +%T) run 16:9 attempt $i"
   $CODEX exec --skip-git-repo-check -s danger-full-access -o codex-last.md "$(cat task-master.md)" > codex-run.log 2>&1 < /dev/null
 done
@@ -35,7 +35,7 @@ echo "$(date +%T) 16:9 done"
 
 for i in 1 2 3 4 5; do
   [[ -z $(missing_ratios) ]] && break
-  grep -q 'usage limit' codex-run-2.log 2>/dev/null && wait_reset codex-run-2.log
+  grep -q 'hit your usage limit' codex-run-2.log 2>/dev/null && wait_reset codex-run-2.log
   echo "$(date +%T) run other ratios attempt $i, missing: $(missing_ratios | tr '\n' ' ')"
   $CODEX exec --skip-git-repo-check -s danger-full-access -o codex-last-2.md "$(cat task-ratios.md)" > codex-run-2.log 2>&1 < /dev/null
 done
