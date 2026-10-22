@@ -27,5 +27,5 @@ After each generation, LOOK at the image. Regenerate (max 2 retries per ratio) i
 ## Output
 IMPORTANT: as soon as each ratio passes your check, IMMEDIATELY copy its PNG (original resolution, no resizing) to
 {{OUT}}/<filename above>
-before starting the next ratio (finished work survives if the usage limit runs out mid-way). If a ratio file already exists there, skip that ratio.
+before starting the next ratio (finished work survives if the run is cut off mid-way). If a ratio file already exists there, skip that ratio.
 At the end write {{OUT}}/六比例-尺寸与完整提示词.md (output path, original pixel size and the exact final prompt for each ratio), and print each output path with its pixel size.
