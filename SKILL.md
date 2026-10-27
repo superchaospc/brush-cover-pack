@@ -2,7 +2,7 @@
 name: brush-cover-pack
 description: >-
   Use when making or revising Chinese video covers / thumbnails in the black-and-yellow brush headline style
-  (黑黄笔刷大字封面: black diagonal brush panel, white + yellow rough calligraphy, warm photoreal portrait of the author as a hard-hat oil engineer opening an oil-pipeline valve — never the analyzed creator, to avoid 肖像权 complaints),
+  (黑黄笔刷大字封面: black diagonal brush panel, white + yellow rough calligraphy, warm photoreal portrait of the author as a hard-hat oil engineer opening an oil-pipeline valve; the analyzed creator appears only small and only when asked, to avoid 肖像权 complaints),
   e.g. the 「超叫兽 · 频道拆解」 series — 做封面, 频道拆解封面, 博主拆解缩略图, 按 GuYi / Wenwen / Paul 那种风格,
   封面多比例套装, YouTube / 抖音 / 视频号 / 小红书 / 公众号封面, 社媒封面 — and when a cover or its titles must
   pass 抖音 / 小红书 review (限流, shadowban, 不适合推荐, 违规).
@@ -10,7 +10,7 @@ description: >-
 
 # Brush Cover Pack（黑黄笔刷大字封面）
 
-一套固定风格：黑色斜向笔刷面板配黄色飞溅边，白色和黄色粗毛笔字，右侧是暖光写实的人像。人物固定是作者本人扮成的油田工程师，在海湾沙漠油田里拧开输油管阀门，取「油管」的谐音。**不画被拆解的博主。** 一次交付 7 个比例。图由图像生成器出（Codex 内置 imagegen），脚本负责拼提示词、排队重试和导出上传尺寸。
+一套固定风格：黑色斜向笔刷面板配黄色飞溅边，白色和黄色粗毛笔字，右侧是暖光写实的人像。人物固定是作者本人扮成的油田工程师，在海湾沙漠油田里拧开输油管阀门，取「油管」的谐音。**封面主角永远是作者；被拆解的博主默认不画，用户要求时才画，而且只能是很小的配角。** 一次交付 7 个比例。图由图像生成器出（Codex 内置 imagegen），脚本负责拼提示词、排队重试和导出上传尺寸。
 
 ## 交付
 
@@ -51,7 +51,7 @@ description: >-
 
 | 规则 | 原因 |
 | --- | --- |
-| **不画被拆解的博主**：不拿他们的截帧或缩略图当参考，也不画任何能认出是他们的人 | 用 AI 照博主本人长相画的封面多次被投诉侵犯肖像权。《民法典》1019 条，AI 画的只要能认出是谁就算肖像，标了「AI 生成」也不能免责 |
+| **主角永远是作者，博主只按指令出现、只能很小**：默认不画被拆解的博主。用户点名要画时，配置 `secondary_person`（在哪、什么样）和 `secondary_refs`（博主截帧），模板会把博主限制成一个小配角：最多约画面高度的 1/8，放在远景或作者手里的屏幕上，不挡作者、不抢文字。用了 `secondary_refs` 时 `identity_refs` 减到 3 张，否则会被 5 张上限截掉 | 用 AI 照博主本人长相画、让博主当主角的封面多次被投诉侵犯肖像权。作者当主角、博主只占一小块，能大大降低风险。但缩小不等于免责：《民法典》1019 条，能认出是谁就算肖像，标「AI 生成」也不能免责。要画博主时提醒用户这一点 |
 | 不写收入承诺：月入、年入、赚X万、副业、躺赚、普通人也能 | 标题带「月入XX万」的作品被抖音、小红书判"不适合推荐"，同样内容在 B站和视频号正常 |
 | 画面里没有 YouTube、TikTok、Instagram 等平台的 Logo、图标和英文名称，也没有货币符号、英文、二维码、账号名。阀门轮画成圆形带辐条，别画出红色圆角矩形加白三角那种播放键 | 会被判为站外导流 |
 | 四行文案里不写「油管」，改用「内容出海」「外网」。「油管」只作为画面里的谐音梗出现（胸牌「油管工人一号」）。发出去如果被限流，先去掉胸牌上的「油管」 | 作者要求；「油管」在抖音、小红书普遍指 YouTube，有被判导流的风险 |
@@ -64,7 +64,7 @@ description: >-
 
 ## 流程
 
-1. **准备**：从拆解报告里取主标题数字，和用户定好四行文案（先给标题让用户确认）。人物参考只用作者照片。
+1. **准备**：从拆解报告里取主标题数字，和用户定好四行文案（先给标题让用户确认）。人物参考用作者照片；用户要求画博主时，另挑 1 张博主截帧放进 `secondary_refs`。
 2. **写配置**：复制 `examples/host-oil-engineer.json`，改 `work_dir`、`out_dir`、`texts`、`extra_rules`、`ratios`，然后运行 `python3 scripts/make_tasks.py cover.json`，生成 `task-master.md`、`task-ratios.md`、`ratios.txt` 和要附带的图片清单。
 3. **出图**：
    - Claude Code：后台运行 `zsh scripts/run.sh <work_dir> <out_dir>`。它会委派给 `codex exec`（参考图用 `--image` 附上），撞到额度上限时自动等待重置再继续。
@@ -84,6 +84,7 @@ description: >-
 - 四行字逐字正确，没有多出的字，黄字最大
 - `scene_texts` 里的字都在、写对了，没有别的字
 - 没有平台 Logo 或英文名称、没有像播放键的形状、没有货币符号和英文
-- 人物是作者本人，脸像、比例自然、头不偏大，表情带笑，画面里没有被拆解的博主或其他可辨认的人，手指正常
+- 人物是作者本人，脸像、比例自然、头不偏大，表情带笑，手指正常
+- 没要求画博主时，画面里没有博主或其他可辨认的人；要求画时，博主只是一个小配角，作者明显是主角
 - 字和头部离左右边至少 8%、离上下边至少 7%；9:16 顶部 12% 不放字
 - 实际像素比例和目标比例相差不超过 1%

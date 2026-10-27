@@ -16,7 +16,7 @@ Exact Chinese text ONLY, all four required, nothing else:
 Spell exactly: {{SPELL}}. Allowed line breaks: {{BREAKS}}.
 Scene marks — the ONLY other writing allowed, each required, spelled exactly: {{SCENE_TEXTS}}.
 
-Platform-compliance rules (posted on 抖音 and 小红书; violations get shadowbanned): NO logos, icons or names of YouTube / TikTok / Instagram or any platform (the Chinese scene marks above are allowed); NO money (no income numbers, no ¥ $ symbols, no banknotes); NO English, no QR codes, no account names, no watermarks, no UI; no other people.
+Platform-compliance rules (posted on 抖音 and 小红书; violations get shadowbanned): NO logos, icons or names of YouTube / TikTok / Instagram or any platform (the Chinese scene marks above are allowed); NO money (no income numbers, no ¥ $ symbols, no banknotes); NO English, no QR codes, no account names, no watermarks, no UI; {{OTHER_PEOPLE}}.
 {{EXTRA_RULES}}
 
 Safe margins: all text, the label, the full head and glasses inside x=8%-92%, y=7%-93% — in practice keep letter strokes and the label inside x=12%-88%. Background may bleed to the edges; shoulders may exit the bottom; head never cropped; clear air above the head. Letters and props never cover the face or glasses. Every ratio is an independent RECOMPOSITION — never crop or stretch another version. Always pass the 16:9 master + identity ref as references.
