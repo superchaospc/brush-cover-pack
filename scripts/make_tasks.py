@@ -6,6 +6,7 @@ Writes into config["work_dir"]:
   task-master.md   16:9 master (fresh generation, or EDIT when "base_image" is set)
   task-ratios.md   the other ratios, recomposed from the approved master
   ratios.txt       output-file stems run.sh waits for
+  images-*.txt     reference images run.sh attaches (at most 5 per call)
 See examples/cover.json for every field.
 """
 import json
@@ -23,8 +24,10 @@ DEFAULTS = {
             "yellow rising line/bar chart with an upward arrow — no logo, no words, no numbers",
     "ratios": list(RATIO_STEMS),
     "style_refs": [],
+    "scene_texts": [],
     "extra_rules": "",
 }
+MAX_IMAGES = 5  # codex imagegen rejects more than 5 referenced images per call
 
 
 def p(path):
@@ -33,6 +36,18 @@ def p(path):
 
 def bullets(paths, empty):
     return "\n".join(f"  - {p(x)}" for x in paths) if paths else f"  - {empty}"
+
+
+def scene_texts(items):
+    if not items:
+        return "none (no other writing at all)"
+    return "; ".join(f'"{x["text"]}" {x["where"]}' for x in items)
+
+
+def capped(paths, what):
+    if len(paths) > MAX_IMAGES:
+        print(f"warning: {what} has {len(paths)} images, keeping the first {MAX_IMAGES} (codex limit)")
+    return paths[:MAX_IMAGES]
 
 
 def spell(s):
@@ -54,6 +69,7 @@ def main():
         "IDENTITY_MAIN": p(ids[0]) if ids else "(none: fictional person — keep the master's face)",
         "SUBJECT": cfg["subject"], "SCENE": cfg["scene"], "FILMING": cfg["filming"], "PROP": cfg["prop"],
         "BREAKS": cfg.get("breaks", "none for the white lines; the yellow line may break at a natural point"),
+        "SCENE_TEXTS": scene_texts(cfg["scene_texts"]),
         "EXTRA_RULES": cfg["extra_rules"],
         "BASE_IMAGE": p(cfg.get("base_image", "")), "CHANGE": cfg.get("change", ""),
     }
@@ -75,6 +91,12 @@ def main():
     tr = (work / "task-ratios.md").read_text().replace("<<RATIO_LIST>>", body)
     (work / "task-ratios.md").write_text(tr)
     (work / "ratios.txt").write_text("\n".join(RATIO_STEMS[r] for r in ratios) + "\n")
+    # run.sh attaches these with `codex exec --image`, so Codex sees the refs instead of only their paths
+    # identity refs come first, so the cap drops style refs before faces
+    master_imgs = ([v["BASE_IMAGE"]] if cfg.get("base_image") else []) + [p(x) for x in ids + cfg["style_refs"]]
+    ratio_imgs = [f"{out}/YouTube-16比9-高清.png"] + [p(x) for x in ids]
+    (work / "images-master.txt").write_text("\n".join(capped(master_imgs, "master")) + "\n")
+    (work / "images-ratios.txt").write_text("\n".join(capped(ratio_imgs, "ratios")) + "\n")
     print(f"wrote {work}/task-master.md ({master_tpl}), task-ratios.md, ratios.txt: {', '.join(ratios)}")
 
 
