@@ -44,6 +44,15 @@ def scene_texts(items):
     return "; ".join(f'"{x["text"]}" {x["where"]}' for x in items)
 
 
+def other_people(desc, refs):
+    if not desc:
+        return "no other people"
+    look = f" (appearance from these attached refs, NOT the identity refs: {', '.join(refs)})" if refs else ""
+    return ("no other people except ONE small secondary figure: " + desc + look + " — the main person stays the clear focus: "
+            "this figure is much smaller (at most about 1/8 of the frame height), placed in the background or on a screen, "
+            "never in front of the main person and never competing with the text")
+
+
 def capped(paths, what):
     if len(paths) > MAX_IMAGES:
         print(f"warning: {what} has {len(paths)} images, keeping the first {MAX_IMAGES} (codex limit)")
@@ -70,6 +79,7 @@ def main():
         "SUBJECT": cfg["subject"], "SCENE": cfg["scene"], "FILMING": cfg["filming"], "PROP": cfg["prop"],
         "BREAKS": cfg.get("breaks", "none for the white lines; the yellow line may break at a natural point"),
         "SCENE_TEXTS": scene_texts(cfg["scene_texts"]),
+        "OTHER_PEOPLE": other_people(cfg.get("secondary_person", ""), [p(x) for x in cfg.get("secondary_refs", [])]),
         "EXTRA_RULES": cfg["extra_rules"],
         "BASE_IMAGE": p(cfg.get("base_image", "")), "CHANGE": cfg.get("change", ""),
     }
@@ -93,8 +103,9 @@ def main():
     (work / "ratios.txt").write_text("\n".join(RATIO_STEMS[r] for r in ratios) + "\n")
     # run.sh attaches these with `codex exec --image`, so Codex sees the refs instead of only their paths
     # identity refs come first, so the cap drops style refs before faces
-    master_imgs = ([v["BASE_IMAGE"]] if cfg.get("base_image") else []) + [p(x) for x in ids + cfg["style_refs"]]
-    ratio_imgs = [f"{out}/YouTube-16比9-高清.png"] + [p(x) for x in ids]
+    sec = cfg.get("secondary_refs", []) if cfg.get("secondary_person") else []
+    master_imgs = ([v["BASE_IMAGE"]] if cfg.get("base_image") else []) + [p(x) for x in ids + sec + cfg["style_refs"]]
+    ratio_imgs = [f"{out}/YouTube-16比9-高清.png"] + [p(x) for x in ids + sec]
     (work / "images-master.txt").write_text("\n".join(capped(master_imgs, "master")) + "\n")
     (work / "images-ratios.txt").write_text("\n".join(capped(ratio_imgs, "ratios")) + "\n")
     print(f"wrote {work}/task-master.md ({master_tpl}), task-ratios.md, ratios.txt: {', '.join(ratios)}")

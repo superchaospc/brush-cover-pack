@@ -27,7 +27,7 @@ Scene marks — the ONLY other writing allowed in the picture, each required, sp
 ## Platform-compliance rules (posted on 抖音 and 小红书; violations get the video shadowbanned)
 - NO logos, icons or names of YouTube, TikTok, Instagram or any other platform anywhere (no red play-button icon, no app icons). The Chinese scene marks above are allowed.
 - NO money: no income numbers, no ¥ $ or other currency symbols, no banknotes, no coins.
-- NO English, no QR codes, no account names/handles, no watermarks, no UI screenshots, no other people.
+- NO English, no QR codes, no account names/handles, no watermarks, no UI screenshots, {{OTHER_PEOPLE}}.
 - Secondary prop (small, never touching the text): {{PROP}}.
 {{EXTRA_RULES}}
 
