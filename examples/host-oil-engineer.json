@@ -1,0 +1,29 @@
+{
+  "work_dir": "~/brush-cover-work/demo-host",
+  "out_dir": "~/brush-cover-work/demo-host/output",
+  "texts": {
+    "label": "超叫兽 · 频道拆解",
+    "line1": "小镇女孩勇闯大上海",
+    "line2": "拍打工日常引来百万老外围观",
+    "headline": "全靠卖惨博流量？"
+  },
+  "breaks": "EXACTLY three text lines under the label, each on ONE line; keep the full-width question mark ？",
+  "identity_refs": [
+    "~/brush-cover-work/host-refs/picked/2-平视正脸微笑.jpg",
+    "~/brush-cover-work/host-refs/picked/3-窗边侧光微笑.jpg",
+    "~/brush-cover-work/host-refs/picked/4-平视45度.jpg",
+    "~/brush-cover-work/host-refs/picked/1-正脸写真.png"
+  ],
+  "style_refs": [],
+  "subject": "the channel host from the identity refs (the AUTHOR of this analysis series, NOT the creator being analyzed), styled as a confident oil-field engineer: a glossy white hard hat with safety goggles pushed up onto it, an orange fire-resistant work coverall with reflective silver stripes, work gloves. Both gloved hands turn a big red cast-iron valve wheel on a thick steel oil pipeline. Friendly, confident, slightly playful smile with relaxed brows; upper body three-quarter view, eyes to the viewer. Looks fresh and well rested, clean-shaven. Magazine-portrait look, 85mm lens, warm golden sunset key light with a rim light",
+  "scene": "a Gulf-region desert oil field at golden sunset, densely filled with silver steel oil pipelines at different depths (flanges, elbows, pipe racks), nodding pumpjacks, storage tanks and a refinery with glowing flare stacks; one big pipeline runs across the whole bottom of the frame and connects to the valve he is turning; heat haze and golden bokeh; no readable signs, no flags, no other people",
+  "filming": "no camera, phone or microphone anywhere — the host is shown as an oil engineer, not filming",
+  "prop": "none — the oil pipeline and valve are the only props; no arrow",
+  "scene_texts": [
+    {"text": "超叫兽", "where": "in bold black on the front of the white hard hat"},
+    {"text": "油管工人一号", "where": "in bold black on a white name patch on the left chest of the coverall, one line"},
+    {"text": "内容出海", "where": "as large black industrial stencil lettering painted on the big pipeline along the bottom, left of his hands"}
+  ],
+  "extra_rules": "- In white line2, \"百万\" is vivid red-orange with a thick white outline, about 30% bigger than the rest of the line.\n- In the yellow headline, \"卖惨\" is vivid red-orange with a thick white outline, about 10% bigger; the headline is still the biggest text.\n- Nothing may look like a platform logo: no red rounded rectangle with a white play triangle.",
+  "ratios": ["3:4", "4:3", "9:16"]
+}
