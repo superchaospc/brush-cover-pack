@@ -4,7 +4,7 @@ Continue an existing cover set with your BUILT-IN image generation tool (imagege
 {{OUT}}/YouTube-16比9-高清.png
 Main identity ref (ignore any burned-in captions): {{IDENTITY_MAIN}}
 
-Keep EVERYTHING the same as the 16:9 master: same person and face ({{SUBJECT}}), same scene ({{SCENE}}), same filming setup ({{FILMING}}), same black diagonal rough brush panel with yellow splatter edges and the same lettering style, same small prop ({{PROP}}).
+Keep EVERYTHING the same as the 16:9 master: same person and face ({{SUBJECT}}), same scene ({{SCENE}}), same filming setup ({{FILMING}}), same black diagonal rough brush panel with yellow splatter edges and the same lettering style, same small prop ({{PROP}}). If any written description here conflicts with the approved 16:9 master image (clothing color, hairstyle, pose, hands, lettering style, text size, panel edges), FOLLOW THE MASTER IMAGE — it was edited after the description was written.
 EYES: natural dark brown-black, clear lenses — absolutely NO green or teal eyes or lens tint.
 LIKENESS: copy the real face and head proportions naturally from the identity refs — do not exaggerate, stretch, square off, widen or slim the face; the head stays in realistic proportion to the shoulders and the headwear. Clean, healthy skin (no heavy eye bags, dark circles or blotches), natural texture, not plastic.
 
@@ -24,7 +24,7 @@ Safe margins: all text, the label, the full head and glasses inside x=8%-92%, y=
 ## Ratios, in this priority order (do them one by one)
 <<RATIO_LIST>>
 
-After each generation, LOOK at the image. Regenerate (max 2 retries per ratio) if any Chinese character is wrong/missing/extra, any platform logo/name or money symbol appears, the eyes look green/teal, the face does not resemble the master, the head looks too big, a scene mark is wrong or missing, the filming setup changed, margins are violated, or the ratio is clearly wrong. Near-target sizes like 1448x1086 or 941x1672 are fine (do not retry for tiny ratio differences).
+After each generation, LOOK at the image. Regenerate (max 2 retries per ratio) if any Chinese character is wrong/missing/extra, any platform logo/name or money symbol appears, the eyes look green/teal, the face does not resemble the master, the head looks too big, a scene mark is wrong or missing, the filming setup changed, the clothing color / hairstyle / hand pose differs from the master, the text is clearly smaller than the space allows, margins are violated, or the ratio is clearly wrong. Near-target sizes like 1448x1086 or 941x1672 are fine (do not retry for tiny ratio differences).
 
 ## Output
 IMPORTANT: as soon as each ratio passes your check, IMMEDIATELY copy its PNG (original resolution, no resizing) to
