@@ -108,7 +108,21 @@ def main():
     ratio_imgs = [f"{out}/YouTube-16比9-高清.png"] + [p(x) for x in ids + sec]
     (work / "images-master.txt").write_text("\n".join(capped(master_imgs, "master")) + "\n")
     (work / "images-ratios.txt").write_text("\n".join(capped(ratio_imgs, "ratios")) + "\n")
-    print(f"wrote {work}/task-master.md ({master_tpl}), task-ratios.md, ratios.txt: {', '.join(ratios)}")
+    # 改图模式会把整张图重画，人物越改越虚：keep_regions 列出要从清楚版本原样贴回的区域，run.sh 出完 16:9 后自动执行
+    keeps = cfg.get("keep_regions", []) if cfg.get("base_image") else []
+    rs = work / "restore.sh"
+    for f in (rs, work / "restore.done"):
+        if f.exists():
+            f.unlink()
+    if keeps:
+        m = f"{out}/YouTube-16比9-高清.png"
+        tool = Path(__file__).resolve().parent / "restore_face.py"
+        lines = ["#!/bin/zsh", "set -e", f'cp "{m}" "{work}/last-edit-raw.png"']
+        for k in keeps:
+            box = " ".join(str(x) for x in k["box"])
+            lines.append(f'python3 "{tool}" "{p(k["from"])}" "{m}" "{m}" --box {box} --shape {k.get("shape", "ellipse")} --feather {k.get("feather", 0.12)}')
+        rs.write_text("\n".join(lines) + "\n")
+    print(f"wrote {work}/task-master.md ({master_tpl}), task-ratios.md, ratios.txt: {', '.join(ratios)}" + (f", restore.sh ({len(keeps)} keep_regions)" if keeps else ""))
 
 
 if __name__ == "__main__":

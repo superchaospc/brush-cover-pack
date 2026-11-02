@@ -34,6 +34,7 @@ for i in 1 2 3 4; do
 done
 [[ -f $OUT/YouTube-16比9-高清.png ]] || { echo "16:9 still missing, giving up"; exit 1; }
 echo "$(date +%T) 16:9 done"
+if [[ -f $W/restore.sh && ! -f $W/restore.done ]]; then zsh $W/restore.sh && touch $W/restore.done && echo "$(date +%T) kept regions restored (restore.sh)"; fi
 [[ -f task-ratios.md && -n $RATIOS ]] || { echo "$(date +%T) finished (master only)"; exit 0; }
 
 for i in 1 2 3 4 5; do

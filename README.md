@@ -114,6 +114,7 @@ scripts/make_tasks.py         配置 → 任务文件
 scripts/run.sh                委派 codex exec，撞额度自动等待
 scripts/export.py             导出上传 JPG，比例不对就拒绝
 scripts/fix_green_eyes.py     只修眼镜区域的绿色偏色
+scripts/restore_face.py       改图后把清楚版本的人物或脸贴回，防止越改越虚（配置 keep_regions 时自动执行）
 references/social-titles.md   社媒标题的写法和模板
 examples/host-oil-engineer.json  示例配置（作者扮油田工程师）
 examples/cover.json           示例配置（虚构人物）
