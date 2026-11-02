@@ -7,6 +7,8 @@
 - EDITED：最新一版（字对了，但脸被重画后变淡变糊）。
 - --box：要贴回的区域，按画面宽高的比例写（左 上 右 下），框住头发、脸、眼镜到下巴，别框进文字。
 - 步骤：两图在 ±8 像素内对齐（用框外一圈背景找最小差）→ 用框外一圈背景算每个通道的亮度增益，把 GOOD 校成 EDITED 的色调 → 椭圆羽化遮罩贴回。
+- 贴字板下方、旁边的背景时加 `--skip-panel`：新图里黑色笔刷和黄色飞溅保留，其余像素从清楚版本贴回。
+- 框贴着画面边缘、框外一圈是改过的字板时，用 `--calib inside`（按框内整体均值校色），否则增益会算偏。
 - 结束会打印对齐偏移和增益；增益偏离 1 超过 0.15 说明两版色调差很多，先人工看一眼。
 """
 import argparse
@@ -17,6 +19,8 @@ ap.add_argument('good'); ap.add_argument('edited'); ap.add_argument('out')
 ap.add_argument('--box', nargs=4, type=float, required=True)
 ap.add_argument('--feather', type=float, default=0.12, help='羽化宽度，占框宽的比例')
 ap.add_argument('--shape', choices=('ellipse', 'rect'), default='ellipse', help='ellipse=只贴脸；rect=整块人物区域（框到画面右边缘也行）')
+ap.add_argument('--skip-panel', action='store_true', help='贴回时避开字板：新图里黑色笔刷和黄色飞溅的像素保留不动（贴字板下方/旁边的背景时用）')
+ap.add_argument('--calib', choices=('ring', 'inside', 'none'), default='ring', help='校色参照：ring=框外一圈背景（默认）；inside=框内整体均值（框贴着画面边缘、外圈是改过的字板时用）；none=不校色')
 a = ap.parse_args()
 
 ed = Image.open(a.edited).convert('RGB')
@@ -57,8 +61,14 @@ _, dx, dy = best
 gshift = ImageChops.offset(gd, dx, dy)
 
 # 2) 色调校准：框外一圈背景的通道均值之比
-gm = ImageStat.Stat(gshift.crop(ring), rm).mean
-em = ImageStat.Stat(er, rm).mean
+if a.calib == 'inside':
+    gm = ImageStat.Stat(gshift.crop((x0, y0, x1, y1))).mean
+    em = ImageStat.Stat(ed.crop((x0, y0, x1, y1))).mean
+elif a.calib == 'ring':
+    gm = ImageStat.Stat(gshift.crop(ring), rm).mean
+    em = ImageStat.Stat(er, rm).mean
+else:
+    gm = em = [1, 1, 1]
 gain = [max(0.7, min(1.3, e / g)) if g > 1 else 1.0 for e, g in zip(em, gm)]
 patch = gshift.crop((x0, y0, x1, y1))
 patch = Image.merge('RGB', [c.point(lambda v, k=k: max(0, min(255, int(v * k)))) for c, k in zip(patch.split(), gain)])
@@ -71,6 +81,13 @@ if a.shape == 'ellipse':
 else:  # 贴到画面边缘的那几边不羽化
     ImageDraw.Draw(mask).rectangle((f if x0 > 0 else 0, f if y0 > 0 else 0, bw - (f if x1 < W else 0), bh - (f if y1 < H else 0)), fill=255)
 mask = mask.filter(ImageFilter.GaussianBlur(f / 2))
+if a.skip_panel:  # 新图里属于字板的像素（很暗，或亮黄飞溅）不贴回
+    e = ed.crop((x0, y0, x1, y1))
+    dark = e.convert('L').point(lambda v: 255 if v < 50 else 0)
+    h, sat, val = e.convert('HSV').split()
+    yel = ImageChops.multiply(ImageChops.multiply(h.point(lambda x: 255 if 25 <= x <= 50 else 0), sat.point(lambda x: 255 if x > 150 else 0)), val.point(lambda x: 255 if x > 170 else 0))
+    panel = ImageChops.lighter(dark, yel).filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.GaussianBlur(4))
+    mask = ImageChops.multiply(mask, ImageChops.invert(panel))
 out = ed.copy()
 out.paste(patch, (x0, y0), mask)
 out.save(a.out)
