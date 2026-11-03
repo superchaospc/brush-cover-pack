@@ -17,6 +17,7 @@ ap.add_argument('--side', type=float, default=0.14, help='左右各收进的比�
 ap.add_argument('--check', action='store_true')
 ap.add_argument('--src-pts', nargs=6, type=float, help='像素坐标：左眼x y 右眼x y 嘴中心x y')
 ap.add_argument('--dst-pts', nargs=6, type=float)
+ap.add_argument('--affine', action='store_true', help='三点完全仿射（会旋转、斜拉）；默认只做等比缩放 + 平移，脸保持端正，眼睛不歪')
 a = ap.parse_args()
 
 src = cv2.imread(a.src); dst = cv2.imread(a.dst)
@@ -33,7 +34,13 @@ cx_d, cy_d = (db[0] + db[2]) / 2, (db[1] + db[3]) / 2
 M = np.array([[s0, 0, cx_d - s0 * cx_s], [0, s0, cy_d - s0 * cy_s]], np.float32)
 
 if a.src_pts:
-    M = cv2.getAffineTransform(np.float32(a.src_pts).reshape(3, 2), np.float32(a.dst_pts).reshape(3, 2))
+    sp = np.float32(a.src_pts).reshape(3, 2); dp = np.float32(a.dst_pts).reshape(3, 2)
+    if a.affine:
+        M = cv2.getAffineTransform(sp, dp)
+    else:  # 手读的点差几个像素，三点仿射会把脸转歪、斜拉；这里不旋转，等比缩放
+        se, de = (sp[0] + sp[1]) / 2, (dp[0] + dp[1]) / 2
+        k = (np.linalg.norm(dp[1] - dp[0]) / np.linalg.norm(sp[1] - sp[0]) + np.linalg.norm(dp[2] - de) / np.linalg.norm(sp[2] - se)) / 2
+        M = np.float32([[k, 0, de[0] - k * se[0]], [0, k, de[1] - k * se[1]]])
 # ECC 精对齐：在 DST 的脸框里比较梯度
 def grad(img):
     g = cv2.GaussianBlur(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float32), (0, 0), 2)
